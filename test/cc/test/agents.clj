@@ -2,9 +2,10 @@
   (:use [cc.agents])
   (:use [clojure.test]))
 
-(deftest test-find-primes 
+(deftest test-find-primes
   (is (= [] (find-primes 1)))
-  (is (= [2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59] (find-primes 60))))
+  (is (= [2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59] (find-primes 60)))
+  (is (= 59999 (last (find-primes 60000)))))
 
 (deftest test-is-prime-true
   (is (= true (prime? 2)))
@@ -14,7 +15,8 @@
   (is (= true (prime? 1361)))
   (is (= true (prime? 2591)))
   (is (= true (prime? 3257)))
-  (is (= true (prime? 7919))))
+  (is (= true (prime? 7919)))
+  (is (= true (prime? 99991))))
 
 (deftest test-is-prime-false
   (is (= false (prime? -1)))
