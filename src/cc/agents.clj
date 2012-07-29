@@ -1,4 +1,6 @@
-(ns cc.agents)
+(ns cc.agents
+  (:import (java.awt BorderLayout Dimension))
+  (:import (javax.swing JLabel JFrame)))
 
 (def primes (agent []))
 
@@ -18,13 +20,19 @@
 	  (dotimes [n (inc i)]
 		(if (prime? n) (send primes #(conj %1 n))))
 	  (await primes) ; block until primes is ready
-      @primes)))
+	  @primes)))
 
+(defn show-primes [i]
+  "Find all primes up to i inclusive and present them in a GUI"
+  (let [fr (JFrame. "Prime Numbers")
+        lbl (JLabel. "Calculating primes...")
+        pane (.getContentPane fr)]
+    (def f (future (find-primes i)))
+    (.setPreferredSize lbl (Dimension. 200 200))
+    (.setPreferredSize fr (Dimension. 200 200))
+    (.setSize fr 500 500)
+    (.add pane lbl BorderLayout/CENTER)
+    (.setVisible fr true)
+    (.setText lbl (str "Prime numbers for " i " are " @f))))
 
-; (if (< i 2)
-;	[]
-;	(dotimes [n (inc i)]
-;	  (loop [primes []]
-;		(if (<= n i)
-;		  (recur (if (prime? n) (conj primes n) primes))
-;		primes)))))
+(show-primes 60000)
