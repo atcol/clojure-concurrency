@@ -22,6 +22,7 @@
 	  (await primes) ; block until primes is ready
 	  @primes)))
 
+; Demonstrates the use of futures and agents and presents results in a Swing GUI
 (defn show-primes [i]
   "Find all primes up to i inclusive and present them in a GUI"
   (let [fr (JFrame. "Prime Numbers")
