@@ -1,6 +1,6 @@
 (ns cc.agents
   (:import (java.awt BorderLayout Dimension))
-  (:import (javax.swing JLabel JFrame)))
+  (:import (javax.swing JLabel JFrame JList JScrollPane DefaultListModel)))
 
 (def primes (agent []))
 
@@ -26,14 +26,21 @@
 (defn show-primes [i]
   "Find all primes up to i inclusive and present them in a GUI"
   (let [fr (JFrame. "Prime Numbers")
-        lbl (JLabel. "Calculating primes...")
+        lbl (JLabel. (str "Here are all the prime numbers for " i ":"))
+        lm (DefaultListModel.)
+        jl (JList. lm)
+        sp (JScrollPane. jl)
         pane (.getContentPane fr)]
-    (def f (future (find-primes i)))
-    (.setPreferredSize lbl (Dimension. 200 200))
-    (.setPreferredSize fr (Dimension. 200 200))
-    (.setSize fr 500 500)
-    (.add pane lbl BorderLayout/CENTER)
+    (def f (future (find-primes i))) ; asynchronously find the primes while we set up the GUI
+    (.setPreferredSize lbl (Dimension. 410 20))
+    (.setPreferredSize sp (Dimension. 410 190))
+    (.setSize fr 410 210)
+    (.setVisibleRowCount jl 5)
+    (.add pane lbl BorderLayout/PAGE_START)
+    (.add pane sp BorderLayout/CENTER)
     (.setVisible fr true)
-    (.setText lbl (str "Prime numbers for " i " are " @f))))
+    ;(println (count @f))
+    (dotimes [n 10] (.addElement lm (str "Moo " n))
+    (println "Done"))))
 
 (show-primes 60000)
