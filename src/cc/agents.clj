@@ -1,6 +1,6 @@
 (ns cc.agents)
 
-;(def primes (agent []))
+(def primes (agent []))
 
 ; Deliberately poor prime algorithm
 (defn prime? [n] 
@@ -14,9 +14,17 @@
   "Find all primes up to i inclusive"
   (if (< i 2) 
 	[]
-	(let [primes []]
-	  (println primes)
-	  (dotimes [n i]
-		(if (prime? n) (conj primes n)))
-	  primes)))
+	(let []
+	  (dotimes [n (inc i)]
+		(if (prime? n) (send primes #(conj %1 n))))
+	  (await primes) ; block until primes is ready
+      @primes)))
 
+
+; (if (< i 2)
+;	[]
+;	(dotimes [n (inc i)]
+;	  (loop [primes []]
+;		(if (<= n i)
+;		  (recur (if (prime? n) (conj primes n) primes))
+;		primes)))))
